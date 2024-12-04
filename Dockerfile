@@ -1,5 +1,5 @@
-# Usa una imagen base de Java
-FROM openjdk:17-jdk-slim
+# Usa una imagen base de Java 21
+FROM openjdk:21-jdk-slim
 
 # Copia el archivo .jar a la imagen
 COPY target/turnerodef-0.0.1-SNAPSHOT.jar turnero.jar
