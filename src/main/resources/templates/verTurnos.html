@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Turnos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        .form-container h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .form-container label {
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .btn-custom {
+            background-color: #6200ea;
+            color: white;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 50px;
+            width: 100%;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-custom:hover {
+            background-color: #3700b3;
+            color: white;
+        }
+
+        .alert-custom {
+            margin-top: 20px;
+            background-color: #ffeb3b;
+            color: #333;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .table-container {
+            margin-top: 40px;
+        }
+
+        .turno-card {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .turno-card .turno-data {
+            margin-bottom: 12px;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .btn-action {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .btn-danger {
+            background-color: #d32f2f;
+            border: none;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c62828;
+        }
+
+        .btn-warning {
+            background-color: #ff9800;
+            border: none;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #f57c00;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 20px;
+                margin-top: 20px;
+            }
+
+            .btn-custom {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .turno-card {
+                padding: 15px;
+            }
+
+            .turno-card .turno-data {
+                font-size: 0.9rem;
+            }
+
+            .btn-action {
+                padding: 8px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-container">
+            <h1>Buscar Turnos</h1>
+
+            <form th:action="@{/verTurnos}" method="post">
+                <div class="mb-3">
+                    <label for="apellido" class="form-label">Apellido</label>
+                    <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Ingresa tu apellido" required>
+                </div>
+                <button type="submit" class="btn btn-custom">Buscar</button>
+            </form>
+
+            <div th:if="${turnos != null}">
+                <div th:if="${!turnos.isEmpty()}" class="table-container">
+                    <div th:each="turno : ${turnos}" class="turno-card">
+                        <div class="turno-data">
+                            <strong>Nombre:</strong> <span th:text="${turno.nombre}"></span>
+                        </div>
+                        <div class="turno-data">
+                            <strong>Apellido:</strong> <span th:text="${turno.apellido}"></span>
+                        </div>
+                        <div class="turno-data">
+                            <strong>Email:</strong> <span th:text="${turno.email}"></span>
+                        </div>
+                        <div class="turno-data">
+                            <strong>Fecha:</strong> <span th:text="${turno.fecha}"></span>
+                        </div>
+                        <div class="turno-data">
+                            <strong>Hora:</strong> <span th:text="${turno.hora}"></span>
+                        </div>
+                        <div>
+                            <form th:action="@{/turno/eliminar/{id}(id=${turno.id})}" method="post">
+                                <button type="submit" class="btn btn-danger btn-action">Eliminar</button>
+                            </form> 
+                            <a th:href="@{/cambiar/{id}(id=${turno.id})}" class="btn btn-warning btn-action">Cambiar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${turnos.isEmpty()}" class="alert-custom" role="alert">
+                    No se encontraron turnos para el apellido ingresado.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
